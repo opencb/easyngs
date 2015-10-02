@@ -73,7 +73,7 @@ After this, in both cases, you **must** execute the following command to fetch t
 
 
 ### Build
-After install _Node.js_ and _npm_ we have to install _npm_ packages for Genome Maps, from the the root folder execute:
+After install _Node.js_ and _npm_ we have to install _npm_ packages for EasyNGS, from the the root folder execute:
 
 ```bash
 npm install
