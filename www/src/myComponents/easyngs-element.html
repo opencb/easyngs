@@ -1,0 +1,229 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+<!-- Iron elements -->
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<!-- Paper elements -->
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-submenu.html">
+<link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../../bower_components/paper-styles/paper-styles-classes.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<!-- JSorolla -->
+<link rel="import" href="../../lib/jsorolla/src/lib/components/opencga/jso-opencga-header.html">
+<!--CSS-->
+<link href='../../lib/jsorolla/src/lib/components/jso-global.css' rel='stylesheet' type='text/css'>
+<link href='../../lib/jsorolla/src/lib/components/jso-form.css' rel='stylesheet' type='text/css'>
+<!-- External components -->
+<script src="../../bower_components/cookies-js/dist/cookies.min.js"></script>
+<!-- My components -->
+<link rel="import" href="easyngs-form-fastqc.html">
+<link rel="import" href="../styles/easyngs-style.html">
+
+<dom-module id="easyngs-element" attributes="selectedOption">
+
+    <style include="easyngs-style"></style>
+    <style>
+        .paperIcon {
+            height: 25px;
+            padding: 10px;
+            cursor: pointer;
+            color: #3f51b5;
+        }
+        .paperIconSubmenu {
+            padding: 10px 10px 10px 30px;
+            color: #798BF3;
+        }
+        .paperIcon:focus {
+            background: lightsteelblue;
+            color: blue;
+        }
+    </style>
+    <template>
+        <paper-drawer-panel id="paperDrawerPanel" drawer-width="300px" force-narrow="true">
+            <!-- Drawer Scroll Header Panel -->
+            <paper-scroll-header-panel drawer fixed>
+
+                <!-- Drawer Toolbar -->
+                <paper-toolbar id="drawerToolbar">
+                    <span class="paper-font-title">Menu</span>
+                </paper-toolbar>
+
+                <!-- Drawer Content -->
+                <paper-menu attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
+                    <paper-icon-item selectedMenu="SRA-Searcher" class="menu-trigger paperIcon">
+                        <iron-icon icon="search" item-icon></iron-icon>
+                        SRA Searcher
+                    </paper-icon-item>
+                    <paper-submenu selectedMenu="Quality-Control">
+                        <paper-icon-item class="menu-trigger paperIcon">
+                            <iron-icon icon="thumbs-up-down" item-icon></iron-icon>
+                            Quality Control
+                            <iron-icon icon="arrow-drop-down"></iron-icon>
+                        </paper-icon-item>
+                        <paper-menu attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}" class="menu-content">
+                            <paper-icon-item selectedMenu="quality-fastQC" class="menu-trigger paperIcon paperIconSubmenu">
+                                <iron-icon src="../img/icons/fastqc.png" item-icon></iron-icon>
+                                fastQC
+                            </paper-icon-item>
+                            <paper-icon-item selectedMenu="quality-trimming" class="menu-trigger paperIcon paperIconSubmenu">
+                                <iron-icon icon="content-cut" item-icon></iron-icon>
+                                Trimming & Filtering
+                            </paper-icon-item>
+                        </paper-menu>
+                    </paper-submenu>
+
+                    <paper-submenu selectedMenu="WGS">
+                        <paper-icon-item class="menu-trigger paperIcon">
+                            <iron-icon icon="label" item-icon></iron-icon>
+                            Whole Genome Sequencing
+                            <iron-icon icon="arrow-drop-down"></iron-icon>
+                        </paper-icon-item>
+                        <paper-menu attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}" class="menu-content">
+                            <paper-icon-item selectedMenu="wgs-mapping" class="menu-trigger paperIcon paperIconSubmenu">
+                                <iron-icon icon="editor:format-align-center" item-icon></iron-icon>
+                                Mapping
+                            </paper-icon-item>
+                            <paper-icon-item selectedMenu="wgs-variant" class="menu-trigger paperIcon paperIconSubmenu">
+                                <iron-icon icon="communication:ring-volume" item-icon></iron-icon>
+                                Variant Calling
+                            </paper-icon-item>
+                        </paper-menu>
+                    </paper-submenu>
+
+                    <paper-submenu selectedMenu="RNA-seq">
+                        <paper-icon-item class="menu-trigger paperIcon">
+                            <iron-icon icon="label" item-icon></iron-icon>
+                            RNA Sequencing
+                            <iron-icon icon="arrow-drop-down"></iron-icon>
+                        </paper-icon-item>
+                        <paper-menu attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}" class="menu-content">
+                            <paper-icon-item selectedMenu="rna-mapping" class="menu-trigger paperIcon paperIconSubmenu">
+                                <iron-icon icon="editor:format-align-center" item-icon></iron-icon>
+                                Mapping
+                            </paper-icon-item>
+                            <paper-icon-item selectedMenu="rna-counting" class="menu-trigger paperIcon paperIconSubmenu">
+                                <iron-icon icon="editor:format-list-numbered" item-icon></iron-icon>
+                                Counting
+                            </paper-icon-item>
+                        </paper-menu>
+                    </paper-submenu>
+
+                    <br>SelectedMenu: <span>{{selectedMenu}}</span>
+                    <br>SelectedSubMenu: <span>{{selectedSubMenu}}</span>
+                </paper-menu>
+
+            </paper-scroll-header-panel>
+
+            <!-- Main Area -->
+            <paper-scroll-header-panel main condenses keep-condensed-header>
+
+                <!-- Main Toolbar -->
+                <!-- TODO: Add button to open menu -->
+                <jso-opencga-header id="mainToolbar" allow-login>
+                <span class="title">
+                    <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+                    easyNGS</span>
+
+                </jso-opencga-header>
+
+                <!--
+                <paper-toolbar id="mainToolbar" class="medium-tall">
+                    <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+
+
+                    <div class="middle middle-container center horizontal layout">
+                        <div class="app-name">easyNGS</div>
+                    </div>
+
+                </paper-toolbar>
+                -->
+                <!-- Main Content -->
+                <div class="content">
+                    <easyngs-form-fastqc></easyngs-form-fastqc>
+                    <iron-pages attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
+
+                        <div selectedMenu="SRA-Searcher">
+
+                            <paper-material elevation="1">
+                                SRA
+                            </paper-material>
+                        </div>
+
+                        <iron-pages selectedMenu="Quality-Control" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
+
+                            <div selectedMenu="quality-fastQC">
+
+                                <paper-material elevation="1">
+                                    fastQC
+                                </paper-material>
+                            </div>
+
+                            <div selectedMenu="quality-trimming">
+
+                                <paper-material elevation="1">
+                                    Trimming
+                                </paper-material>
+                            </div>
+
+                        </iron-pages>
+
+                        <iron-pages selectedMenu="WGS" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
+
+                            <div selectedMenu="wgs-mapping">
+                                <paper-material elevation="1">
+                                    WGS-mapping
+                                </paper-material>
+                            </div>
+
+                            <div selectedMenu="wgs-variant">
+                                <paper-material elevation="1">
+                                    WGS Variant
+                                </paper-material>
+                            </div>
+
+                        </iron-pages>
+
+                        <iron-pages selectedMenu="RNA-seq" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
+
+                            <div selectedMenu="rna-mapping">
+                                <paper-material elevation="1">
+                                    RNA-mapping
+                                </paper-material>
+                            </div>
+
+                            <div selectedMenu="rna-counting">
+                                <paper-material elevation="1">
+                                    RNA-counting
+                                </paper-material>
+                            </div>
+
+                        </iron-pages>
+
+
+                    </iron-pages>
+                </div>
+
+                <!-- Status bar -->
+                <!-- TODO: div -->
+            </paper-scroll-header-panel>
+        </paper-drawer-panel>
+
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-element"
+        })
+    </script>
+</dom-module>
