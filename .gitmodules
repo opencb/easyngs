@@ -1,3 +1,6 @@
 [submodule "www/lib/jsorolla"]
 	path = www/lib/jsorolla
 	url = https://github.com/opencb/jsorolla.git
+[submodule "www/src/lib/jsorolla"]
+	path = www/src/lib/jsorolla
+	url = https://github.com/opencb/jsorolla.git

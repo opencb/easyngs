@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         connect: {
             port: 8080,
-            base: '.'
+            base: './src'
         }
     });
 

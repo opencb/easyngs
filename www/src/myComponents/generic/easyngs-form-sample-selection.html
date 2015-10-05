@@ -1,0 +1,26 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+
+<dom-module id="easyngs-form-sample-selection">
+    <style>
+        :host {
+            margin: auto;
+            padding: 10px;
+            width: 100%;
+        }
+        .mycheckbox {
+            height: 25px;
+            padding-bottom: 10px;
+            display: block;
+        }
+    </style>
+    <template>
+        <paper-checkbox class="mycheckbox">label1</paper-checkbox>
+        <paper-checkbox class="mycheckbox" checked> label2</paper-checkbox>
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-form-sample-selection",
+        });
+    </script>
+</dom-module>

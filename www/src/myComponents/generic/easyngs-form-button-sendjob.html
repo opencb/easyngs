@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="easyngs-form-button-sendjob" attributes="selectedOption">
+    <style>
+        :host {
+            margin: auto;
+            padding: 10px;
+            width: 100%;
+        }
+    </style>
+    <template>
+        <paper-button raised>
+            <iron-icon icon="send"></iron-icon>
+            Send job
+        </paper-button>
+
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-form-button-sendjob",
+            listeners: {
+                'tap': 'handleTap'
+            },
+            handleTap: function (e) {
+                console.log("Button: The button has been tapped. " + e);
+                this.fire('sendjob');
+            }
+        });
+    </script>
+</dom-module>

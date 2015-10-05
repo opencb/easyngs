@@ -1,4 +1,4 @@
 .idea
-www/bower_components
+www/src/bower_components
 www/node_modules
 easyngs.iml

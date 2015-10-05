@@ -1,39 +1,42 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="stylesheet" href="../../bower_components/font-awesome/css/font-awesome.min.css">
+<link rel="import" href="../bower_components/polymer/polymer.html">
 <!-- Iron elements -->
-<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
-<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
-<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
-<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <!-- Paper elements -->
-<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
-<link rel="import" href="../../bower_components/paper-material/paper-material.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
-<link rel="import" href="../../bower_components/paper-menu/paper-submenu.html">
-<link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
-<link rel="import" href="../../bower_components/paper-styles/paper-styles-classes.html">
-<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
-<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
-<!-- JSorolla -->
-<link rel="import" href="../../lib/jsorolla/src/lib/components/opencga/jso-opencga-header.html">
+<link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-menu/paper-submenu.html">
+<link rel="import" href="../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles-classes.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<!-- JSorolla and dependencies -->
+<link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.min.css">
+<link rel="import" href="../lib/jsorolla/src/lib/components/opencga/jso-opencga-header.html">
+<script src="../lib/jsorolla/src/lib/opencga-manager.js"></script>
+<script src="../bower_components/crypto-js/crypto-js.js"></script>
+<script src="../bower_components/crypto-js/sha1.js"></script>
+<script src="../lib/jsorolla/src/lib/utils.js"></script>
 <!--CSS-->
-<link href='../../lib/jsorolla/src/lib/components/jso-global.css' rel='stylesheet' type='text/css'>
-<link href='../../lib/jsorolla/src/lib/components/jso-form.css' rel='stylesheet' type='text/css'>
+<link href='../lib/jsorolla/src/lib/components/jso-global.css' rel='stylesheet' type='text/css'>
+<link href='../lib/jsorolla/src/lib/components/jso-form.css' rel='stylesheet' type='text/css'>
 <!-- External components -->
-<script src="../../bower_components/cookies-js/dist/cookies.min.js"></script>
+<script src="../bower_components/cookies-js/dist/cookies.min.js"></script>
 <!-- My components -->
-<link rel="import" href="easyngs-form-fastqc.html">
-<link rel="import" href="../styles/easyngs-style.html">
+<link rel="import" href="../styles/easyngs-theme.html">
+<link rel="import" href="qualityControl/easyngs-run-qc-fastqc.html">
 
 <dom-module id="easyngs-element" attributes="selectedOption">
 
-    <style include="easyngs-style"></style>
     <style>
         .paperIcon {
             height: 25px;
@@ -48,6 +51,17 @@
         .paperIcon:focus {
             background: lightsteelblue;
             color: blue;
+        }
+        div.footer {
+            padding: 0.5em;
+            color: white;
+            background-color: gray;
+            clear: left;
+        }
+        .easyngs-status-bar {
+            display: block;
+            position: relative;
+            box-sizing: border-box;
         }
     </style>
     <template>
@@ -119,9 +133,6 @@
                             </paper-icon-item>
                         </paper-menu>
                     </paper-submenu>
-
-                    <br>SelectedMenu: <span>{{selectedMenu}}</span>
-                    <br>SelectedSubMenu: <span>{{selectedSubMenu}}</span>
                 </paper-menu>
 
             </paper-scroll-header-panel>
@@ -131,8 +142,8 @@
 
                 <!-- Main Toolbar -->
                 <!-- TODO: Add button to open menu -->
-                <jso-opencga-header id="mainToolbar" allow-login>
-                <span class="title">
+                <jso-opencga-header id="mainToolbar" hide-signup hide-jobs hide-browse>
+                <span class="title" style="font-size:25px;">
                     <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
                     easyNGS</span>
 
@@ -150,24 +161,20 @@
                 </paper-toolbar>
                 -->
                 <!-- Main Content -->
-                <div class="content">
-                    <easyngs-form-fastqc></easyngs-form-fastqc>
+                <div class="content" menu-option="home">
                     <iron-pages attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
 
                         <div selectedMenu="SRA-Searcher">
 
                             <paper-material elevation="1">
-                                SRA
+                                Show SRA searcher!
                             </paper-material>
                         </div>
 
                         <iron-pages selectedMenu="Quality-Control" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
 
                             <div selectedMenu="quality-fastQC">
-
-                                <paper-material elevation="1">
-                                    fastQC
-                                </paper-material>
+                                <easyngs-run-qc-fastqc></easyngs-run-qc-fastqc>
                             </div>
 
                             <div selectedMenu="quality-trimming">
@@ -217,13 +224,21 @@
 
                 <!-- Status bar -->
                 <!-- TODO: div -->
+                <div class="footer easyngs-status-bar">
+                    <span>{{selectedMenu}}</span>: <span>{{selectedSubMenu}}</span>
+                </div>
             </paper-scroll-header-panel>
         </paper-drawer-panel>
 
     </template>
     <script>
         Polymer({
-            is: "easyngs-element"
+            is: "easyngs-element",
+            attached: function() {
+                document.querySelector('easyngs-form-button-sendjob').addEventListener('sendjob', function (e) {
+                    console.log(e.detail); // true
+                })
+            },
         })
     </script>
 </dom-module>
