@@ -1,0 +1,67 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../../../lib/jsorolla/src/lib/components/jso-panel.html">
+<link rel="import" href="../../../lib/jsorolla/src/lib/components/opencga/files/jso-opencga-browser.html">
+
+
+
+<dom-module id="easyngs-form-trimmomatic" attributes="selectedOption">
+    <style>
+        #browserPanel {
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 600px;
+        }
+    </style>
+    <template>
+        <form is="iron-form" id="form" method="post" action="/form/handler">
+            <div class="layout horizontal center">
+                <paper-input class="flex" name="outputDir" label="Select output directory">
+                    <paper-icon-button suffix on-tap="showBrowser" icon="folder"></paper-icon-button>
+                </paper-input>
+                <paper-tooltip>
+                    Create all output files in the specified output directory.
+                    By default, the files will be created in the same directory where the input file is located.
+                </paper-tooltip>
+            </div>
+            <div class="layout horizontal center">
+                <paper-textarea class="flex" name="extraParams" max-rows=5
+                                label="Additional input parameters"></paper-textarea>
+                <paper-tooltip>
+                    Please, insert here all additional parameters not present in the previous form that you would like to add.
+                </paper-tooltip>
+            </div>
+        </form>
+
+        <jso-panel hidden collapsible movable closable id="browserPanel" on-hidden="handlePanelHidden">
+            <div class="header">
+                Browse my data
+            </div>
+            <div class="container flex">
+                <jso-opencga-browser id="browser" disable-new-project disable-new-study on-fileselect="handleFileSelect" mode="folder" on-need-refresh="handleUserNeedRefresh"></jso-opencga-browser>
+            </div>
+        </jso-panel>
+
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-form-trimmomatic",
+            showBrowser: function() {
+                this.$.browserPanel.hidden = !this.$.browserPanel.hidden;
+            },
+            handlePanelHidden: function () {
+                console.log("Panel Browser hidden.");
+            }
+        });
+    </script>
+</dom-module>

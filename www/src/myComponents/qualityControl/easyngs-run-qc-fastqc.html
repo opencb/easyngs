@@ -12,25 +12,27 @@
             height: 400px;
         }
         .left {
+            width: 300px;
+            margin-left: 50px;
+            margin-top: 50px;
             float: left;
-            padding: 10px;
-            width: 30%;
-            margin-left: 20px;
         }
         .right {
-            padding: 10px;
-            float: right;
-            width: 60%;
+            position: absolute;
+            left: 400px;
+            width: 600px;
         }
     </style>
     <template>
         <easyngs-view-title title="FastQC"></easyngs-view-title>
-        <div class="left">
-            <easyngs-form-sample-selection></easyngs-form-sample-selection>
-        </div>
-        <div class="right">
-            <easyngs-form-fastqc></easyngs-form-fastqc>
-            <easyngs-form-button-sendjob></easyngs-form-button-sendjob>
+        <div>
+            <div class="left">
+                <easyngs-form-sample-selection></easyngs-form-sample-selection>
+            </div>
+            <div class="right">
+                <easyngs-form-fastqc></easyngs-form-fastqc>
+                <easyngs-form-button-sendjob></easyngs-form-button-sendjob>
+            </div>
         </div>
     </template>
     <script>

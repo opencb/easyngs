@@ -10,15 +10,12 @@
 
 <dom-module id="easyngs-form-fastqc" attributes="selectedOption">
     <style>
-        .container {
+        :host {
             margin: auto;
-            padding: 10px;
-            width: 100%;
         }
     </style>
     <template>
         <form is="iron-form" id="form" method="post" action="/form/handler" class="container">
-                <div class="container">
                     <paper-input style="width: 95%; display: inline-block" name="outputDir" label="Select output directory">
                         <paper-icon-button suffix icon="folder"></paper-icon-button>
                     </paper-input>
@@ -34,7 +31,6 @@
                     <paper-tooltip for="extraParams">
                         Please, insert here all additional parameters not present in the previous form that you would like to add.
                     </paper-tooltip>
-                </div>
         </form>
     </template>
     <script>

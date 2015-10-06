@@ -1,0 +1,41 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="easyngs-form-select-software" attributes="selectedOption">
+    <style>
+        :host {
+            margin: auto;
+            width: 100%;
+            display: block;
+        }
+    </style>
+    <template>
+        <paper-dropdown-menu label="NGS software">
+            <paper-menu class="dropdown-content" selected="0">
+                <template is="dom-repeat" items="{{software}}">
+                    <paper-item>{{showSoftwareName(item)}}</paper-item>
+                </template>
+            </paper-menu>
+        </paper-dropdown-menu>
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-form-select-software",
+            properties: {
+                software: Array
+            },
+            listeners: {
+                'tap': 'handleTap'
+            },
+            ready: function() {
+                this.software = software;
+
+            },
+            showSoftwareName: function(item) {
+                return item.name + " " + item.version;
+            }
+        });
+    </script>
+</dom-module>

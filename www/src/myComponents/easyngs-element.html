@@ -34,6 +34,7 @@
 <!-- My components -->
 <link rel="import" href="../styles/easyngs-theme.html">
 <link rel="import" href="qualityControl/easyngs-run-qc-fastqc.html">
+<link rel="import" href="qualityControl/trimming/easyngs-run-trimming.html">
 
 <dom-module id="easyngs-element" attributes="selectedOption">
 
@@ -161,8 +162,12 @@
                 </paper-toolbar>
                 -->
                 <!-- Main Content -->
-                <div class="content" menu-option="home">
+                <div class="content">
                     <iron-pages attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
+
+                        <div selectedMenu="home">
+                            This is the home view.
+                        </div>
 
                         <div selectedMenu="SRA-Searcher">
 
@@ -178,10 +183,7 @@
                             </div>
 
                             <div selectedMenu="quality-trimming">
-
-                                <paper-material elevation="1">
-                                    Trimming
-                                </paper-material>
+                                <easyngs-run-trimming></easyngs-run-trimming>
                             </div>
 
                         </iron-pages>
@@ -234,11 +236,21 @@
     <script>
         Polymer({
             is: "easyngs-element",
+            properties: {
+              selectedMenu: {
+                  type: String,
+                  value: "home",
+                  observer: 'selectedMenuChanged'
+              }
+            },
             attached: function() {
                 document.querySelector('easyngs-form-button-sendjob').addEventListener('sendjob', function (e) {
                     console.log(e.detail); // true
                 })
             },
+            selectedMenuChanged: function(neo, old) {
+
+            }
         })
     </script>
 </dom-module>

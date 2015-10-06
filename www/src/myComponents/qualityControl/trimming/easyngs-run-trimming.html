@@ -1,0 +1,49 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="easyngs-form-trimmomatic.html">
+<link rel="import" href="../../generic/easyngs-form-sample-selection.html">
+<link rel="import" href="../../generic/easyngs-form-button-sendjob.html">
+<link rel="import" href="../../generic/easyngs-view-title.html">
+<link rel="import" href="../../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../generic/easyngs-form-select-software.html">
+
+<dom-module id="easyngs-run-trimming">
+    <style>
+        div {
+            height: 400px;
+        }
+        .left {
+            width: 300px;
+            margin-left: 50px;
+            margin-top: 50px;
+            float: left;
+        }
+        .right {
+            position: absolute;
+            left: 400px;
+            width: 600px;
+        }
+    </style>
+    <template>
+        <easyngs-view-title title="Trimming"></easyngs-view-title>
+        <div class="left">
+            <easyngs-form-sample-selection></easyngs-form-sample-selection>
+        </div>
+        <div class="right">
+            <easyngs-form-select-software software="{{software}}"></easyngs-form-select-software>
+            <easyngs-form-trimmomatic></easyngs-form-trimmomatic>
+            <easyngs-form-button-sendjob></easyngs-form-button-sendjob>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-run-trimming",
+            properties: {
+                software: Array,
+                values: []
+            },
+            created: function () {
+                software = QUALITY_CONTROL.trimming;
+            }
+        });
+    </script>
+</dom-module>
