@@ -14,7 +14,7 @@
 
 
 
-<dom-module id="easyngs-form-trimmomatic" attributes="selectedOption">
+<dom-module id="easyngs-form-cutadapt" attributes="selectedOption">
     <style>
         #browserPanel {
             position: absolute;
@@ -26,10 +26,18 @@
     <template>
         <form is="iron-form" id="form" method="post" action="/form/handler">
             <div class="layout horizontal center">
+                <paper-input class="flex" name="adapters"
+                                label="Adapter content"></paper-input>
+                <iron-icon id="adapter" icon="info" style="display: inline-block"></iron-icon>
+                <paper-tooltip for="adapter">
+                    Insert the adapter content to be removed from the input file(s).
+                </paper-tooltip>
+            </div>
+            <div class="layout horizontal center">
                 <paper-textarea class="flex" name="extraParams" max-rows=5
                                 label="Additional input parameters"></paper-textarea>
-                <iron-icon id="extra" icon="info"></iron-icon>
-                <paper-tooltip for="extra">
+                <iron-icon id="additional" icon="info" style="display: inline-block"></iron-icon>
+                <paper-tooltip for="additional">
                     Please, insert here all additional parameters not present in the previous form that you would like to add.
                 </paper-tooltip>
             </div>
@@ -57,7 +65,7 @@
     </template>
     <script>
         Polymer({
-            is: "easyngs-form-trimmomatic",
+            is: "easyngs-form-cutadapt",
             showBrowser: function() {
                 this.$.browserPanel.hidden = !this.$.browserPanel.hidden;
             },

@@ -11,30 +11,47 @@
             display: block;
         }
     </style>
-    <template>
-        <paper-dropdown-menu label="NGS software">
-            <paper-menu class="dropdown-content" selected="0">
-                <template is="dom-repeat" items="{{software}}">
-                    <paper-item>{{showSoftwareName(item)}}</paper-item>
-                </template>
-            </paper-menu>
-        </paper-dropdown-menu>
-    </template>
+        <template>
+            <div class="layout horizontal center">
+                <div style="width:200px;">
+                    <paper-dropdown-menu label="NGS software">
+                        <paper-menu attr-for-selected="value" class="dropdown-content" selected={{selectedItem}}>
+                            <template is="dom-repeat" items="{{software}}">
+                                <paper-item value="{{item}}">{{showName(item)}}</paper-item>
+                            </template>
+                        </paper-menu>
+                    </paper-dropdown-menu>
+                </div>
+                <a style="margin-left: 50px; color: #2c43aa;" href={{showWeb(selectedItem)}} target="_blank">Show manual</a>
+            </div>
+        </template>
     <script>
         Polymer({
             is: "easyngs-form-select-software",
             properties: {
-                software: Array
+                software: Array,
+                selectedItem: {
+                    type: String,
+                    notify: true
+                }
             },
             listeners: {
                 'tap': 'handleTap'
             },
             ready: function() {
                 this.software = software;
-
+                this.selectedItem = software[0];
             },
-            showSoftwareName: function(item) {
+            showName: function(item) {
                 return item.name + " " + item.version;
+            },
+            showWeb: function(item) {
+                return item.url;
+            },
+            showDescription: function(item) {
+                debugger;
+                console.log(item);
+                return "HOLA";
             }
         });
     </script>

@@ -15,16 +15,18 @@ CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
 var QUALITY_CONTROL = {
     "trimming": [
         {
-            "name": "fastX",
-            "version": "v1.0",
-            "path": "/opt/etc/fastx",
-            "description": "Toolkit to trim and filter fastq samples."
-        },
-        {
             "name": "CutAdapt",
             "version": "v2.1",
             "path": "/opt",
-            "description": "Tool to remove adapters from fastq files."
+            "description": "Tool to remove adapters from fastq files.",
+            "url": "http://cutadapt.readthedocs.org/en/latest/guide.html"
+        },
+        {
+            "name": "Trimmomatic",
+            "version": "v2.1",
+            "path": "/opt",
+            "description": "Tool to remove adapters from fastq files.",
+            "url": "http://www.usadellab.org/cms/?page=trimmomatic"
         }
     ]
 };
