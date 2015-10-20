@@ -20,6 +20,7 @@ We recommend to contact EasyNGS developers by writing to OpenCB mailing list ope
 * Ana Conesa (aconesa@cipf.es)
 * Ignacio Medina (im411@cam.ac.uk)
 * Pedro Furio (pfurio@cipf.es)
+* Nicolás Lucero (nicolas_lucero85@yahoo.es)
 
 ##### Contributing
 EasyNGS is an open-source and collaborative project. We appreciate any help and feeback from users, you can contribute in many different ways such as simple bug reporting and feature request. Dependending on your skills you are more than welcome to develop client tools, new features or even fixing bugs.

@@ -1,0 +1,108 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tooltip/paper-tooltip.html">
+
+<link rel="import" href="../../lib/jsorolla/src/lib/components/jso-panel.html">
+<link rel="import" href="../../lib/jsorolla/src/lib/components/opencga/files/jso-opencga-browser.html">
+
+<dom-module id="easyngs-basic-form" attributes="program">
+    <style>
+        #browserPanel {
+            position: absolute;
+            top: 0px;
+            left: 0;
+            width: 600px;
+        }
+    </style>
+    <template>
+        <!--TODO: The id of the form, the action and so on will have to be changed -->
+        <form is="iron-form" id="form" method="post" action="/form/handler">
+            <template is="dom-repeat" items="{{getParameters(program)}}">
+                <div class="layout horizontal center">
+                    <paper-input class="flex" name="{{item.id)}}" label="{{item.name}}"
+                                 error-message="The value inserted is not correct." auto-validate
+                                 value="{{getDefault(item)}}" pattern="{{getPattern(item)}}"
+                                 required$="{{item.required}}"
+                            >
+                    </paper-input>
+                    <iron-icon id="{{getIconID(item)}}" icon="info" style="display: inline-block"></iron-icon>
+                    <paper-tooltip for="{{getIconID(item)}}">
+                        <span>{{item.description}}</span>
+                    </paper-tooltip>
+                </div>
+            </template>
+
+            <div class="layout horizontal center">
+                <paper-textarea class="flex" name="extraParams" max-rows=5
+                                label="Additional input parameters"></paper-textarea>
+                <iron-icon id="additional" icon="info" style="display: inline-block"></iron-icon>
+                <paper-tooltip for="additional">
+                    Please, insert here all additional parameters not present in the previous form that you would like to add.
+                </paper-tooltip>
+            </div>
+
+            <div class="layout horizontal center">
+                <paper-input class="flex" name="outputDir" label="Select output directory">
+                    <paper-icon-button suffix on-tap="showBrowser" icon="folder"></paper-icon-button>
+                </paper-input>
+                <iron-icon id="outDir" icon="info"></iron-icon>
+                <paper-tooltip for="outDir">
+                    Create all output files in the specified output directory.
+                    By default, the files will be created in the same directory where the input file is located.
+                </paper-tooltip>
+            </div>
+        </form>
+
+        <jso-panel hidden collapsible movable closable id="browserPanel" on-hidden="handlePanelHidden">
+            <div class="header">
+                Browse my data
+            </div>
+            <div class="container flex">
+                <jso-opencga-browser id="browser" disable-new-project disable-new-study on-fileselect="handleFileSelect" mode="folder" on-need-refresh="handleUserNeedRefresh"></jso-opencga-browser>
+            </div>
+        </jso-panel>
+
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-basic-form",
+            properties: {
+                program: Array
+            },
+            showBrowser: function() {
+                this.$.browserPanel.hidden = !this.$.browserPanel.hidden;
+            },
+            handlePanelHidden: function () {
+                console.log("Panel Browser hidden.");
+            },
+            getParameters: function(item) {
+                return item.parameters;
+            },
+            getDefault: function(item) {
+                if (item.hasOwnProperty("default")) {
+                    return item.default;
+                }
+                return "";
+            },
+            getPattern: function(item) {
+                if (item.numeric === true) {
+                    return "[0-9]+";
+                } else {
+                    // TODO: Add other values. (- fr-unstranded)
+                    return "[A-Za-z]+";
+                }
+
+            },
+            getIconID: function(item) {
+                return item.id + "-icon";
+            }
+        });
+    </script>
+</dom-module>

@@ -22,36 +22,29 @@
                         </paper-menu>
                     </paper-dropdown-menu>
                 </div>
-                <a style="margin-left: 50px; color: #2c43aa;" href={{showWeb(selectedItem)}} target="_blank">Show manual</a>
+                <a style="margin-left: 50px; color: #2c43aa;" href={{selectedItem.website}} target="_blank">Show manual</a>
             </div>
         </template>
     <script>
         Polymer({
             is: "easyngs-form-select-software",
             properties: {
-                software: Array,
+                software: {
+                    type: Array,
+                    observer: '_softwareChanged'
+                },
                 selectedItem: {
                     type: String,
                     notify: true
                 }
             },
-            listeners: {
-                'tap': 'handleTap'
-            },
-            ready: function() {
-                this.software = software;
-                this.selectedItem = software[0];
-            },
             showName: function(item) {
                 return item.name + " " + item.version;
             },
-            showWeb: function(item) {
-                return item.url;
-            },
-            showDescription: function(item) {
-                debugger;
-                console.log(item);
-                return "HOLA";
+            _softwareChanged: function() {
+                if (this.software.length > 0) {
+                    this.selectedItem = this.software[0];
+                }
             }
         });
     </script>

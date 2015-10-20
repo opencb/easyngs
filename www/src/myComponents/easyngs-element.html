@@ -35,6 +35,7 @@
 <link rel="import" href="../styles/easyngs-theme.html">
 <link rel="import" href="qualityControl/easyngs-run-qc-fastqc.html">
 <link rel="import" href="qualityControl/trimming/easyngs-run-trimming.html">
+<link rel="import" href="generic/easyngs-run-analysis.html">
 
 <dom-module id="easyngs-element" attributes="selectedOption">
 
@@ -90,7 +91,7 @@
                         <paper-menu attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}" class="menu-content">
                             <paper-icon-item selectedMenu="quality-fastQC" class="menu-trigger paperIcon paperIconSubmenu">
                                 <iron-icon src="../img/icons/fastqc.png" item-icon></iron-icon>
-                                fastQC
+                                FastQC
                             </paper-icon-item>
                             <paper-icon-item selectedMenu="quality-trimming" class="menu-trigger paperIcon paperIconSubmenu">
                                 <iron-icon icon="content-cut" item-icon></iron-icon>
@@ -175,60 +176,51 @@
                                 Show SRA searcher!
                             </paper-material>
                         </div>
+                            <iron-pages selectedMenu="Quality-Control" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
 
-                        <iron-pages selectedMenu="Quality-Control" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
+                                <div selectedMenu="quality-fastQC">
+                                    <easyngs-run-analysis title="RAW Quality Control:" software={{fastqc}}></easyngs-run-analysis>
+                                </div>
 
-                            <div selectedMenu="quality-fastQC">
-                                <easyngs-run-qc-fastqc></easyngs-run-qc-fastqc>
-                            </div>
+                                <div selectedMenu="quality-trimming">
+                                    <easyngs-run-analysis title="Trimming:" software={{trimming}}></easyngs-run-analysis>
+                                </div>
 
-                            <div selectedMenu="quality-trimming">
-                                <easyngs-run-trimming></easyngs-run-trimming>
-                            </div>
+                            </iron-pages>
+
+                            <iron-pages selectedMenu="WGS" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
+
+                                <div selectedMenu="wgs-mapping">
+                                    <easyngs-run-analysis title="WGS Mapping:" software="{{wgsMapping}}"></easyngs-run-analysis>
+                                </div>
+
+                                <div selectedMenu="wgs-variant">
+                                    <easyngs-run-analysis title="Variant Calling:" software={{variant}}></easyngs-run-analysis>
+                                </div>
+
+                            </iron-pages>
+
+                            <iron-pages selectedMenu="RNA-seq" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
+
+                                <div selectedMenu="rna-mapping">
+                                    <easyngs-run-analysis title="RNA-seq mapping:" software={{rnaMapping}}></easyngs-run-analysis>
+                                </div>
+
+                                <div selectedMenu="rna-counting">
+                                    <easyngs-run-analysis title="Counting:" software={{rnaCounting}}></easyngs-run-analysis>
+                                </div>
+
+                            </iron-pages>
+
 
                         </iron-pages>
+                    </div>
 
-                        <iron-pages selectedMenu="WGS" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
-
-                            <div selectedMenu="wgs-mapping">
-                                <paper-material elevation="1">
-                                    WGS-mapping
-                                </paper-material>
-                            </div>
-
-                            <div selectedMenu="wgs-variant">
-                                <paper-material elevation="1">
-                                    WGS Variant
-                                </paper-material>
-                            </div>
-
-                        </iron-pages>
-
-                        <iron-pages selectedMenu="RNA-seq" attr-for-selected="selectedMenu" selected="{{selectedSubMenu}}">
-
-                            <div selectedMenu="rna-mapping">
-                                <paper-material elevation="1">
-                                    RNA-mapping
-                                </paper-material>
-                            </div>
-
-                            <div selectedMenu="rna-counting">
-                                <paper-material elevation="1">
-                                    RNA-counting
-                                </paper-material>
-                            </div>
-
-                        </iron-pages>
-
-
-                    </iron-pages>
-                </div>
-
-                <!-- Status bar -->
-                <!-- TODO: div -->
+                                        <!-- Status bar -->
+                <!-- TODO: div
                 <div class="footer easyngs-status-bar">
                     <span>{{selectedMenu}}</span>: <span>{{selectedSubMenu}}</span>
-                </div>
+                </div>-->
             </paper-scroll-header-panel>
         </paper-drawer-panel>
 
@@ -241,7 +233,39 @@
                   type: String,
                   value: "home",
                   observer: 'selectedMenuChanged'
-              }
+              },
+                fastqc: {
+                    type: Array,
+                    value: []
+                },
+                trimming: {
+                    type: Array,
+                    value: []
+                },
+                wgsMapping: {
+                    type: Array,
+                    value: []
+                },
+                variant: {
+                    type: Array,
+                    value: []
+                },
+                rnaMapping: {
+                    type: Array,
+                    value: []
+                },
+                rnaCounting: {
+                    type: Array,
+                    value: []
+                }
+            },
+            ready: function () {
+                this.fastqc = QUALITY_CONTROL.fastqc;
+                this.trimming = QUALITY_CONTROL.trimming;
+                this.wgsMapping = WGS.mapping;
+                this.variant = WGS.variant;
+                this.rnaMapping = RNASEQ.mapping;
+                this.rnaCounting = RNASEQ.counting;
             },
             attached: function() {
                 document.querySelector('easyngs-form-button-sendjob').addEventListener('sendjob', function (e) {

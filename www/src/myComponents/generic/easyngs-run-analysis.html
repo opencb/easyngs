@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../generic/easyngs-form-sample-selection.html">
+<link rel="import" href="../generic/easyngs-basic-form.html">
+<link rel="import" href="../generic/easyngs-form-button-sendjob.html">
+<link rel="import" href="../generic/easyngs-view-title.html">
+<link rel="import" href="../generic/easyngs-form-select-software.html">
+
+<dom-module id="easyngs-run-analysis">
+    <style>
+        div {
+            height: 400px;
+        }
+        .left {
+            width: 400px;
+            margin: 50px;
+            padding-top: 30px;
+        }
+        .right {
+            margin: 50px;
+            min-width: 300px;
+            max-width: 800px;
+        }
+
+    </style>
+    <template>
+        <easyngs-view-title title="{{title}}" subtitle="{{getName(program)}}"></easyngs-view-title>
+        <div class="layout horizontal center">
+            <div class="left">
+                <easyngs-form-sample-selection></easyngs-form-sample-selection>
+            </div>
+            <div class="flex right">
+                <easyngs-form-select-software software="{{software}}" selected-item="{{program}}"></easyngs-form-select-software>
+                <easyngs-basic-form program="{{program}}"></easyngs-basic-form>
+                <easyngs-form-button-sendjob></easyngs-form-button-sendjob>
+            </div>
+        </div>
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-run-analysis",
+            properties: {
+                title: String,
+                software: Array
+            },
+            ready: function () {
+                title = this.title;
+            },
+            getName: function(item) {
+                return item.name;
+            },
+            getTitle: function() {
+                return this.title;
+            }
+        });
+    </script>
+</dom-module>
