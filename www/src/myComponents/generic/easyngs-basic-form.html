@@ -26,37 +26,38 @@
         <form is="iron-form" id="form" method="post" action="/form/handler">
             <template is="dom-repeat" items="{{getParameters(program)}}">
                 <div class="layout horizontal center">
+                    <iron-icon id="{{getIconID(item)}}" icon="info" style="margin-top: 25px; margin-right: 8px;"></iron-icon>
+                    <paper-tooltip for="{{getIconID(item)}}">
+                        <span>{{item.description}}</span>
+                    </paper-tooltip>
                     <paper-input class="flex" name="{{item.id)}}" label="{{item.name}}"
                                  error-message="The value inserted is not correct." auto-validate
                                  value="{{getDefault(item)}}" pattern="{{getPattern(item)}}"
                                  required$="{{item.required}}"
                             >
                     </paper-input>
-                    <iron-icon id="{{getIconID(item)}}" icon="info" style="display: inline-block"></iron-icon>
-                    <paper-tooltip for="{{getIconID(item)}}">
-                        <span>{{item.description}}</span>
-                    </paper-tooltip>
+
                 </div>
             </template>
 
             <div class="layout horizontal center">
-                <paper-textarea class="flex" name="extraParams" max-rows=5
-                                label="Additional input parameters"></paper-textarea>
-                <iron-icon id="additional" icon="info" style="display: inline-block"></iron-icon>
+                <iron-icon id="additional" icon="info" style="margin-top: 25px; margin-right: 8px;"></iron-icon>
                 <paper-tooltip for="additional">
                     Please, insert here all additional parameters not present in the previous form that you would like to add.
                 </paper-tooltip>
+                <paper-textarea class="flex" name="extraParams" max-rows=5
+                                label="Additional input parameters"></paper-textarea>
             </div>
 
             <div class="layout horizontal center">
-                <paper-input class="flex" readonly name="outputDir" label="Select output directory" value$="{{selectedFolder}}" on-tap="showBrowser">
-                    <paper-icon-button suffix icon="folder"></paper-icon-button>
-                </paper-input>
-                <iron-icon id="outDir" icon="info"></iron-icon>
+                <iron-icon id="outDir" icon="info" style="margin-top: 25px; margin-right: 8px;"></iron-icon>
                 <paper-tooltip for="outDir">
                     Create all output files in the specified output directory.
                     By default, the files will be created in the same directory where the input file is located.
                 </paper-tooltip>
+                <paper-input class="flex" readonly name="outputDir" label="Select output directory" value$="{{selectedFolder}}" on-tap="showBrowser">
+                    <paper-icon-button suffix icon="folder"></paper-icon-button>
+                </paper-input>
             </div>
         </form>
 

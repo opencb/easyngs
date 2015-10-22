@@ -1,0 +1,69 @@
+<!--
+@license
+Copyright (c) 2015 Winston Howes. All rights reserved.
+This code may only be used under the MIT license found at https://github.com/winhowes/file-tree/blob/master/LICENSE
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<!--
+An element displaying a file tree.
+
+Example:
+
+    <file-tree></file-tree>
+
+@demo
+-->
+
+<link rel="import" href="file-folder.html">
+
+<dom-module id="file-tree">
+
+    <style>
+        :host {
+            color: var(--default-primary-color);
+        }
+
+    </style>
+
+    <template>
+        <div>
+            <file-folder id="topFolder" data="{{data}}"></file-folder>
+        </div>
+    </template>
+
+</dom-module>
+
+<script>
+
+    Polymer({
+
+        is: 'file-tree',
+
+        properties: {
+
+            /**
+             * `data` is the data to be used for the tree.
+             */
+            data: {
+                type: Object,
+                value: null,
+                observe: "_dataChanged"
+            },
+
+        },
+
+        /**
+         * Called whenever the data is changed to notify the lower folders
+         */
+        _dataChanged: function()  {
+            this.$.topFolder.data = this.data;
+        },
+
+        ready: function() {
+            this._dataChanged();
+        }
+
+    });
+
+</script>
