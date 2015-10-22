@@ -31,7 +31,7 @@
             </div>
             <div class="flex right">
                 <easyngs-form-select-software software="{{software}}" selected-item="{{program}}"></easyngs-form-select-software>
-                <easyngs-basic-form program="{{program}}"></easyngs-basic-form>
+                <easyngs-basic-form program="{{program}}" projects="{{projects}}"></easyngs-basic-form>
                 <easyngs-form-button-sendjob></easyngs-form-button-sendjob>
             </div>
         </div>
@@ -41,7 +41,11 @@
             is: "easyngs-run-analysis",
             properties: {
                 title: String,
-                software: Array
+                software: Array,
+                projects: {
+                    type: Array,
+                    notify: true
+                }
             },
             ready: function () {
                 title = this.title;

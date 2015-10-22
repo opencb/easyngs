@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-multi-selectable.html">
+
+<dom-module id="easyngs-sample-selection" attributes="program">
+    <link rel="import" type="css" href="../../lib/jsorolla/src/lib/components/jso-dropdown.css">
+    <style>
+        .iron-selected {
+            background: #ee3d2f;
+        }
+
+    </style>
+    <template>
+        <div class="jso-dropdown">
+            <div tabindex="-1">
+                Example text
+            </div>
+            <ul class="jso-context">
+                <li> A level 0 </li>
+                <li> B level 0 </li>
+                <li data-divider></li>
+                <li data-sub> C level 0
+                    <ul class="jso-context">
+                        <li> D level 1 </li>
+                        <li> E level </li>
+                        <li data-divider></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <iron-selector attr-for-selected="name" selected="foo" multi>
+            <div name="foo">Foo</div>
+            <div name="bar">Bar</div>
+            <div name="zot">Zot</div>
+        </iron-selector>
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-sample-selection",
+
+        });
+    </script>
+</dom-module>

@@ -49,8 +49,8 @@
             </div>
 
             <div class="layout horizontal center">
-                <paper-input class="flex" name="outputDir" label="Select output directory">
-                    <paper-icon-button suffix on-tap="showBrowser" icon="folder"></paper-icon-button>
+                <paper-input class="flex" readonly name="outputDir" label="Select output directory" value$="{{selectedFolder}}" on-tap="showBrowser">
+                    <paper-icon-button suffix icon="folder"></paper-icon-button>
                 </paper-input>
                 <iron-icon id="outDir" icon="info"></iron-icon>
                 <paper-tooltip for="outDir">
@@ -60,12 +60,12 @@
             </div>
         </form>
 
-        <jso-panel hidden collapsible movable closable id="browserPanel" on-hidden="handlePanelHidden">
+        <jso-panel hidden collapsible movable closable id="browserPanel">
             <div class="header">
                 Browse my data
             </div>
             <div class="container flex">
-                <jso-opencga-browser id="browser" disable-new-project disable-new-study on-fileselect="handleFileSelect" mode="folder" on-need-refresh="handleUserNeedRefresh"></jso-opencga-browser>
+                <jso-opencga-browser id="browser" disable-new-project disable-new-study on-fileselect="handleFileSelect" projects="{{projects}}" mode="folder" on-need-refresh="handleUserNeedRefresh"></jso-opencga-browser>
             </div>
         </jso-panel>
 
@@ -74,13 +74,32 @@
         Polymer({
             is: "easyngs-basic-form",
             properties: {
-                program: Array
+                program: Array,
+                projects: {
+                    type: Array,
+                    notify: true,
+                    observer: 'handlePanelHidden'
+                },
+                selectedFolder: String
             },
             showBrowser: function() {
                 this.$.browserPanel.hidden = !this.$.browserPanel.hidden;
             },
-            handlePanelHidden: function () {
-                console.log("Panel Browser hidden.");
+            handlePanelHidden: function (e) {
+                debugger
+            },
+            handleFileSelect: function(e) {
+                console.log("file");
+                console.log(e.detail);
+                var file = e.detail;
+                if (file.index && file.index.status == 'READY') {
+                    var track = this.addTrack(file.bioformat, file.name, file);
+                    this._updateTrackMenu();
+                }
+                this.selectedFolder = e.detail.path;
+            },
+            handleUserNeedRefresh: function() {
+                this.$.jsoHeader.getUserInfo(true);
             },
             getParameters: function(item) {
                 return item.parameters;
