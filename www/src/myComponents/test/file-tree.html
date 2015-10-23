@@ -28,7 +28,9 @@ Example:
 
     <template>
         <div>
-            <file-folder id="topFolder" data="{{data}}"></file-folder>
+            <template is="dom-repeat" items="{{studies}}">
+                <file-folder id="{{_getID(item)}}" bioformats="{{bioformats}}"></file-folder>
+            </template>
         </div>
     </template>
 
@@ -45,24 +47,162 @@ Example:
             /**
              * `data` is the data to be used for the tree.
              */
-            data: {
-                type: Object,
-                value: null,
-                observe: "_dataChanged"
+            studies: {
+                type: Array,
+                value: [],
+                observer: '_changedStudies'
             },
 
+            bioformats: {
+                type: Array,
+                value: []
+            },
+
+            files: {
+                type: {}
+            }
         },
 
-        /**
-         * Called whenever the data is changed to notify the lower folders
-         */
-        _dataChanged: function()  {
-            this.$.topFolder.data = this.data;
+        _getData: function(itemID) {
+            return this.files.hasOwnProperty(itemID) ? this.files[itemID] : [];
         },
 
-        ready: function() {
-            this._dataChanged();
-        }
+        _getID: function(item) {
+            return "study_" + item.id;
+        },
+
+        _changedStudies: function () {
+            this.files = [];
+            for (var i = 0; i < this.studies.length; i++) {
+                this._showStudyFolder(this.studies[i]);
+            }
+        },
+
+        _showStudyFolder: function (study) {
+            var me = this;
+            this._getStudyFolder(study.id, function (folder) {
+                me.set('folders', []);
+                me.folder = folder;
+                me._getFilesInFolder(study.id, me.folder.id, function (files) {
+                    var elem = me.$$('#study_' + study.id);
+
+                    var aux = {
+                        "name": study.name,
+                        "id": study.id,
+                        "open": false,
+                        "type": "FOLDER",
+                        "children": files
+                    };
+
+                    elem.studyID = study.id;
+                    elem.data = aux;
+                });
+            });
+        },
+
+        _getStudyFolder: function(studyId, callback) {
+            this.message = '';
+            var folder;
+            OpencgaManager.files.search({
+                query: {
+                    sid: Cookies('bioinfo_sid'),
+                    studyId: studyId,
+                    name: '.'
+                },
+                request: {
+                    async: true,
+                    success: function (response) {
+                        if (response.response[0].errorMsg === '' || response.response[0].errorMsg == null) {
+                            folder = response.response[0].result[0];
+                            callback(folder);
+                        } else {
+                            console.log(response.response[0].errorMsg);
+                        }
+                    },
+                    error: function () {
+                        console.log('Server error, try again later.');
+                    }
+                }
+            });
+        },
+
+        _getFilesInFolder: function (studyId, folderId, callback) {
+            var me = this;
+            var files;
+
+            var bfList = [];
+            for (var i = 0; i < this.bioformats.length; i++) {
+                var bf = this.bioformats[i];
+                bfList.push(bf.value);
+            }
+
+            OpencgaManager.files.list({
+                id: folderId,
+                query: {
+                    sid: Cookies('bioinfo_sid'),
+                    status: 'READY',
+                    bioformat: bfList.join(',') + ',NONE',
+                    type: 'FILE,FOLDER',
+                    studyId: studyId
+                },
+                request: {
+                    async: true,
+                    success: function (response) {
+                        if (response.response[0].errorMsg === '' || response.response[0].errorMsg == null) {
+                            files = me._filterFiles(response.response[0].result);
+//                            files = response.response[0].result;
+                            callback(files);
+                        } else {
+                            console.log(response.response[0].errorMsg);
+                        }
+                    },
+                    error: function () {
+                        console.log('Server error, try again later.');
+                    }
+                }
+            });
+        },
+
+        _filterFiles: function (files) {
+            var bfList = [];
+            for (var i = 0; i < this.bioformats.length; i++) {
+                var bf = this.bioformats[i];
+                bfList.push(bf.value);
+            }
+
+            files.sort(function (a, b) {
+                return b.creationDate.localeCompare(a.creationDate);
+            });
+            var filesFiltered = [];
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                if (this.mode == 'folder') {
+                    if (file.type == 'FILE') {
+                        continue;
+                    }
+                    filesFiltered.push(file);
+                } else {
+                    if (file.name.charAt(0) == '.') {
+                        continue;
+                    }
+                    if (file.type == 'FILE' && bfList.indexOf(file.bioformat) == -1) {
+                        continue;
+                    }
+                    if (Utils.endsWith(file.name, '.snappy')) {
+                        continue;
+                    }
+                    if (file.bioformat == 'ALIGNMENT'
+                            && ( Utils.endsWith(file.name, '.bam.bai') || Utils.endsWith(file.name, '.bam.coverage.json.gz') )
+                    ) {
+                        continue;
+                    }
+                    filesFiltered.push(file);
+                }
+            }
+            return filesFiltered;
+        },
+
 
     });
 

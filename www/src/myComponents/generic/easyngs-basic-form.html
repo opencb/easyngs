@@ -63,7 +63,7 @@
 
         <jso-panel hidden collapsible movable closable id="browserPanel">
             <div class="header">
-                Browse my data
+                Select output folder
             </div>
             <div class="container flex">
                 <jso-opencga-browser id="browser" disable-new-project disable-new-study on-fileselect="handleFileSelect" projects="{{projects}}" mode="folder" on-need-refresh="handleUserNeedRefresh"></jso-opencga-browser>
@@ -78,16 +78,12 @@
                 program: Array,
                 projects: {
                     type: Array,
-                    notify: true,
-                    observer: 'handlePanelHidden'
+                    notify: true
                 },
                 selectedFolder: String
             },
             showBrowser: function() {
                 this.$.browserPanel.hidden = !this.$.browserPanel.hidden;
-            },
-            handlePanelHidden: function (e) {
-                debugger
             },
             handleFileSelect: function(e) {
                 console.log("file");

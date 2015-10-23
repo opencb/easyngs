@@ -4,15 +4,15 @@
 <dom-module id="easyngs-sample-selection" attributes="program">
     <style>
         :host {
-            margin: 10px;
+
         }
     </style>
     <template>
-        <div class="layout horizontal center wrap">
-            <div style="width: 50%">
-                <file-tree data={{data}}></file-tree>
+        <div class="layout horizontal center wrap" style="margin-left: 50px;">
+            <div style="width: 50%; height: 100%">
+                <file-tree id="treeSamples" studies={{studies}} bioformats="{{bioformats}}"></file-tree>
             </div>
-            <div style="width: 50%; height: 200px;">
+            <div class="flex" style="height: 100%; margin-left: 20px;">
                 <template is="dom-repeat" items="{{selected}}">
                     <div>{{item}}</div>
                 </template>
@@ -24,55 +24,25 @@
         Polymer({
             is: "easyngs-sample-selection",
             properties: {
-                data: {
-                    type: Object,
-                    value: {
-                        "name": "Tree B",
-                        "open": true,
-                        "shared": false,
-                        "children": [
-                            {
-                                "name": "Child A",
-                                "open": true,
-                                "shared": false,
-                                "children": [{
-                                    "name": "Grandchild A"
-                                }]
-                            },
-                            {
-                                "name": "Child B",
-                                "shared": true,
-                                "open": false,
-                                "children": [{
-                                    "name": "Grandchild B",
-                                    open: false,
-                                    "children": [{
-                                        "name": "Great Grandchild B"
-                                    }]
-                                }]
-                            },
-                            {
-                                "name": "Child C",
-                                "shared": false,
-                                "open": false,
-                                "children": [{
-                                    "name": "Grandchild C"
-                                }]
-                            },
-                            {
-                                "name": "Child D",
-                                "shared": false,
-                                "open": false,
-                                "children": [{
-                                    "name": "Grandchild D"
-                                }]
-                            }
-                        ]
-                    }
+                studies: {
+                    type: Array,
+                    value: [],
+                    observer: '_changeStudy'
+                },
+                projects:{
+                    type: Array,
+                    notify: true,
+                    observer: 'projectChanged'
                 },
                 selected: {
                     type: Array,
                     value: []
+                },
+                bioformats: {
+                    type: Array,
+                    value: [{
+                        "value": "NONE"
+                    }]
                 }
             },
             listeners: {
@@ -86,7 +56,14 @@
             _removeItem: function(e) {
                 var index = this.selected.indexOf(e.target.__data__.data.name);
                 this.splice("selected", index, 1);
+            },
+            projectChanged: function () {
+                this.set("studies", this.projects[0].studies);
+            },
+            _changeStudy: function () {
+                this.$.treeSamples.studies = this.studies;
             }
+
 
         });
     </script>

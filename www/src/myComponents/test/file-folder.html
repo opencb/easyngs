@@ -15,7 +15,7 @@ Example:
 @demo
 -->
 
-<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <dom-module id="file-folder">
 
@@ -73,7 +73,7 @@ Example:
             <ul hidden$={{!data.open}}>
                 <template is="dom-repeat" items="{{data.children}}">
                     <li>
-                        <file-folder data="{{item}}"></file-folder>
+                        <file-folder id={{_getID(item)}} study-id="{{studyID}}" bioformats="{{bioformats}}" data="{{item}}"></file-folder>
                     </li>
                 </template>
             </ul>
@@ -94,12 +94,26 @@ Example:
              * `data` is the data to be used for the tree.
              */
             data: {
-                type: Object,
+                type: {},
                 value: function() {
                     return {};
-                }
+                },
+                observer: '_changedData'
             },
 
+            studyID: {
+                type: Number
+            },
+
+            bioformats: {
+                type: Array,
+                value: []
+            }
+
+        },
+
+        _getID: function(item) {
+            return item.type + "_" + item.id;
         },
 
         /**
@@ -123,14 +137,14 @@ Example:
          * @param {boolean}, whether or not the folder is shared
          */
         _determineIcon: function(data) {
-            return data.hasOwnProperty("children") ? 'folder' : 'description';
+            return data.type === "FOLDER" ? 'folder' : 'description';
         },
 
         /**
          * Highlights folder as the selected folder.
          */
         selectFolder: function(e) {
-            if (!this.__data__.data.hasOwnProperty("children")) {
+            if (this.__data__.data.type === "FILE") {
                 var mydom = Polymer.dom(this).classList;
                 if (mydom.contains("test")) {
                     this.fire("itemRemoved", this);
@@ -146,7 +160,115 @@ Example:
          */
         toggleChildren: function(e) {
             this.set("data.open", !this.data.open && this.data.children && this.data.children.length);
+        },
+
+        _changedData: function() {
+            if (this.data.hasOwnProperty("children")) {
+                for (var i = 0; i < this.data.children.length; i++) {
+                    if (this.data.children[i].type === "FOLDER") {
+                        this._showFolder(this.data.children[i]);
+                    }
+                }
+            }
+        },
+
+        _showFolder: function (folder) {
+            var me = this;
+            this._getFilesInFolder(this.studyID, folder.id, function (files) {
+                var elem = me.$$('#FOLDER_' + folder.id);
+
+                var aux = {
+                    "name": folder.name,
+                    "id": folder.id,
+                    "open": false,
+                    "type": "FOLDER"
+                };
+
+                if (files.length > 0) {
+                    aux["children"] = files;
+                }
+                elem.data = aux;
+
+            });
+        },
+
+        _getFilesInFolder: function (studyId, folderId, callback) {
+            var me = this;
+            var files;
+
+            var bfList = [];
+            for (var i = 0; i < this.bioformats.length; i++) {
+                var bf = this.bioformats[i];
+                bfList.push(bf.value);
+            }
+
+            OpencgaManager.files.list({
+                id: folderId,
+                query: {
+                    sid: Cookies('bioinfo_sid'),
+                    status: 'READY',
+                    bioformat: bfList.join(',') + ',NONE',
+                    type: 'FILE,FOLDER',
+                    studyId: studyId
+                },
+                request: {
+                    async: true,
+                    success: function (response) {
+                        if (response.response[0].errorMsg === '' || response.response[0].errorMsg == null) {
+                            files = me._filterFiles(response.response[0].result);
+//                            files = response.response[0].result;
+                            callback(files);
+                        } else {
+                            console.log(response.response[0].errorMsg);
+                        }
+                    },
+                    error: function () {
+                        console.log('Server error, try again later.');
+                    }
+                }
+            });
+        },
+
+        _filterFiles: function (files) {
+            var bfList = [];
+            for (var i = 0; i < this.bioformats.length; i++) {
+                var bf = this.bioformats[i];
+                bfList.push(bf.value);
+            }
+
+            files.sort(function (a, b) {
+                return b.creationDate.localeCompare(a.creationDate);
+            });
+            var filesFiltered = [];
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+
+                if (this.mode == 'folder') {
+                    if (file.type == 'FILE') {
+                        continue;
+                    }
+                    filesFiltered.push(file);
+                } else {
+                    if (file.name.charAt(0) == '.') {
+                        continue;
+                    }
+                    if (file.type == 'FILE' && bfList.indexOf(file.bioformat) == -1) {
+                        continue;
+                    }
+                    if (Utils.endsWith(file.name, '.snappy')) {
+                        continue;
+                    }
+                    if (file.bioformat == 'ALIGNMENT'
+                            && ( Utils.endsWith(file.name, '.bam.bai') || Utils.endsWith(file.name, '.bam.coverage.json.gz') )
+                    ) {
+                        continue;
+                    }
+                    filesFiltered.push(file);
+                }
+            }
+            return filesFiltered;
         }
+
 
     });
 

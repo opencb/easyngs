@@ -214,12 +214,10 @@
                 <!-- Main Content -->
                 <div class="content">
                     <iron-pages attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
-
                         <div selectedMenu="home">
-                            <easyngs-run-analysis title="Trimming:" software={{trimming}} projects={{projects}}></easyngs-run-analysis>
-                            This is the home view.
+                            <easyngs-run-analysis title="Raw Quality Control:" software={{fastqc}} projects={{projects}}></easyngs-run-analysis>
                         </div>
-
+<!--
                         <div selectedMenu="SRA-Searcher">
 
                             <paper-material elevation="1">
@@ -261,7 +259,7 @@
                                 </div>
 
                             </iron-pages>
-
+-->
 
                         </iron-pages>
                     </div>
@@ -352,7 +350,7 @@
                 },
                 opencgaHost: {
                     type: String,
-                    value: OpencgaManager.host
+                    value: "http://localhost:8081/opencga"
                 }
             },
             ready: function () {

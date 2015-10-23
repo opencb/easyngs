@@ -10,15 +10,14 @@
 <dom-module id="easyngs-run-analysis">
     <style>
         div {
-            height: 400px;
+            height: 100%;
         }
         .left {
-            width: 600px;
-            margin: 50px;
+            width: 50%;
             padding-top: 30px;
         }
         .right {
-            margin: 50px;
+            padding-right: 50px;
             min-width: 300px;
             max-width: 800px;
         }
@@ -28,7 +27,7 @@
         <easyngs-view-title title="{{title}}" subtitle="{{getName(program)}}"></easyngs-view-title>
         <div class="layout horizontal center wrap">
             <div class="left">
-                <easyngs-sample-selection></easyngs-sample-selection>
+                <easyngs-sample-selection projects="{{projects}}"></easyngs-sample-selection>
             </div>
             <div class="flex right">
                 <easyngs-form-select-software software="{{software}}" selected-item="{{program}}"></easyngs-form-select-software>
