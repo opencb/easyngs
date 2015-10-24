@@ -1,22 +1,53 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../test/file-tree.html">
+<link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
 
 <dom-module id="easyngs-sample-selection" attributes="program">
     <style>
-        :host {
-
+        .paper-header {
+            background: var(--dark-primary-color);
+            color: var(--text-primary-color);
+            height: 30px;
+            font-size: 20px;
+            font-weight: 200;
+            text-align: center;
+        }
+        .selected-samples {
+            margin-top: 10px;
+        }
+        .sample-selector {
+            margin-top: 10px;
+        }
+        .sample {
+            height: 25px;
+            font-weight: 300;
+            font-size: large;
         }
     </style>
     <template>
         <div class="layout horizontal center wrap" style="margin-left: 50px;">
-            <div style="width: 50%; height: 100%">
-                <file-tree id="treeSamples" studies={{studies}} bioformats="{{bioformats}}"></file-tree>
-            </div>
-            <div class="flex" style="height: 100%; margin-left: 20px;">
-                <template is="dom-repeat" items="{{selected}}">
-                    <div>{{item}}</div>
-                </template>
-            </div>
+            <paper-header-panel style="width: 50%; min-width: 200px;">
+                <div class="paper-header">Select samples</div>
+                <paper-card style="width:100%; min-height: 400px;">
+                    <div class="sample-selector card-content">
+                        <file-tree id="treeSamples" studies={{studies}} bioformats="{{bioformats}}"></file-tree>
+                    </div>
+                </paper-card>
+            </paper-header-panel>
+
+            <span style="width:10px;"></span>
+
+            <paper-header-panel class="flex" style="min-width: 200px;">
+                <div class="paper-header">Samples selected</div>
+                <paper-card style="width:100%; min-height: 400px;">
+                    <div class="selected-samples  card-content">
+                        <template is="dom-repeat" items="{{selected}}">
+                            <div class="sample">{{item.name}}</div>
+                        </template>
+                    </div>
+                </paper-card>
+            </paper-header-panel>
         </div>
 
     </template>
@@ -50,15 +81,16 @@
                 "itemRemoved" : "_removeItem"
             },
             _addItem: function(e) {
-                this.push("selected", e.target.__data__.data.name);
+                this.push("selected", e.target.__data__.data);
             },
 
             _removeItem: function(e) {
-                var index = this.selected.indexOf(e.target.__data__.data.name);
+                var index = this.selected.indexOf(e.target.__data__.data);
                 this.splice("selected", index, 1);
             },
             projectChanged: function () {
                 this.set("studies", this.projects[0].studies);
+                this.set("selected", []);
             },
             _changeStudy: function () {
                 this.$.treeSamples.studies = this.studies;

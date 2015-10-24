@@ -7,6 +7,7 @@ EASYNGS_VERSION = "v0.5";
 
 // Development
 OPENCGA_VERSION = "v1";
+//OPENCGA_HOST = "http://localhost:8081/opencga";
 OPENCGA_HOST = "http://bioinfodev.hpc.cam.ac.uk/opencga";
 
 CELLBASE_VERSION = "v3";

@@ -215,9 +215,10 @@
                 <div class="content">
                     <iron-pages attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
                         <div selectedMenu="home">
-                            <easyngs-run-analysis title="Raw Quality Control:" software={{fastqc}} projects={{projects}}></easyngs-run-analysis>
+                            <!--<easyngs-run-analysis title="Raw Quality Control:" software={{fastqc}} projects={{projects}}></easyngs-run-analysis>-->
+                            HOME PANEL
                         </div>
-<!--
+
                         <div selectedMenu="SRA-Searcher">
 
                             <paper-material elevation="1">
@@ -259,7 +260,6 @@
                                 </div>
 
                             </iron-pages>
--->
 
                         </iron-pages>
                     </div>
@@ -350,12 +350,8 @@
                 },
                 opencgaHost: {
                     type: String,
-                    value: "http://localhost:8081/opencga"
+                    value: OpencgaManager.host
                 }
-            },
-            ready: function () {
-                this.opencgaHost = "http://localhost:8081/opencga";
-                OpencgaManager.host = this.opencgaHost;
             },
             attached: function() {
                 document.querySelector('easyngs-form-button-sendjob').addEventListener('sendjob', function (e) {
