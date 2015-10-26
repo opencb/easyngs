@@ -6,7 +6,7 @@
 <link rel="import" href="../generic/easyngs-view-title.html">
 <link rel="import" href="../generic/easyngs-form-select-software.html">
 <link rel="import" href="../generic/easyngs-sample-selection.html">
-<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../generic/easyngs-basic-panel.html">
 
 <dom-module id="easyngs-run-analysis">
     <style>
@@ -23,14 +23,6 @@
             max-width: 800px;
             height: 400px;
         }
-        .paper-header {
-            background: var(--dark-primary-color);
-            color: var(--text-primary-color);
-            height: 30px;
-            font-size: 20px;
-            font-weight: 200;
-            text-align: center;
-        }
         .send-bar {
             margin-top: 50px;
             margin-left: 44px;
@@ -44,13 +36,10 @@
                 <easyngs-sample-selection projects="{{projects}}"></easyngs-sample-selection>
             </div>
             <div class="flex right">
-                <div class="paper-header">Set the parameters</div>
-                <paper-card style="width:100%; height: 100%; overflow-y: auto;">
-                    <div style="margin-left: 10px; margin-right: 10px;">
-                        <easyngs-form-select-software software="{{software}}" selected-item="{{program}}"></easyngs-form-select-software>
-                        <easyngs-basic-form program="{{program}}" projects="{{projects}}"></easyngs-basic-form>
-                    </div>
-                </paper-card>
+                <easyngs-basic-panel title="Set the parameters">
+                    <easyngs-form-select-software software="{{software}}" selected-item="{{program}}"></easyngs-form-select-software>
+                    <easyngs-basic-form program="{{program}}" projects="{{projects}}"></easyngs-basic-form>
+                </easyngs-basic-panel>
             </div>
         </div>
         <div class="send-bar">

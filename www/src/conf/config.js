@@ -7,11 +7,22 @@ EASYNGS_VERSION = "v0.5";
 
 // Development
 OPENCGA_VERSION = "v1";
-//OPENCGA_HOST = "http://localhost:8081/opencga";
-OPENCGA_HOST = "http://bioinfodev.hpc.cam.ac.uk/opencga";
+OPENCGA_HOST = "http://localhost:8081/opencga";
+//OPENCGA_HOST = "http://bioinfodev.hpc.cam.ac.uk/opencga";
 
 CELLBASE_VERSION = "v3";
 CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
+
+var TEST = [
+    {
+        "name": "Test tool",
+        "id": "test",
+        "version": "v1.0",
+        "description": "Test tool",
+    }
+]
+
+
 
 var QUALITY_CONTROL = {
     "trimming": [

@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<dom-module id="easyngs-basic-panel">
+    <style>
+        .paper-header {
+            background: var(--dark-primary-color);
+            color: var(--text-primary-color);
+            height: 30px;
+            font-size: 20px;
+            font-weight: 200;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+    </style>
+    <template>
+        <div class="paper-header">{{title}}</div>
+        <paper-card style="width:100%; height: 100%; overflow-y: auto;">
+            <div class="card-content" style="margin: 10px;">
+                <content></content>
+            </div>
+        </paper-card>
+    </template>
+    <script>
+        Polymer({
+            is: "easyngs-basic-panel",
+            properties: {
+                title: {
+                    type: String
+                }
+            }
+        });
+    </script>
+</dom-module>

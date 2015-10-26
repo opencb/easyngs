@@ -1,17 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../test/file-tree.html">
-<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="easyngs-basic-panel.html">
 
 <dom-module id="easyngs-sample-selection" attributes="program">
     <style>
-        .paper-header {
-            background: var(--dark-primary-color);
-            color: var(--text-primary-color);
-            height: 30px;
-            font-size: 20px;
-            font-weight: 200;
-            text-align: center;
-        }
         .selected-samples {
             padding-top: 10px;
         }
@@ -27,25 +19,19 @@
     <template>
         <div class="layout horizontal center wrap" style="margin-left: 50px;">
             <div style="width: 50%; min-width: 200px;">
-                <div class="paper-header">Select samples</div>
-                <paper-card style="width:100%; height: 100%; overflow-y: auto;">
-                    <div class="sample-selector card-content">
-                        <file-tree id="treeSamples" studies={{studies}} bioformats="{{bioformats}}"></file-tree>
-                    </div>
-                </paper-card>
+                <easyngs-basic-panel title="Select samples">
+                    <file-tree id="treeSamples" studies={{studies}} bioformats="{{bioformats}}"></file-tree>
+                </easyngs-basic-panel>
             </div>
 
             <span style="width:10px;"></span>
 
             <div class="flex" style="min-width: 200px;">
-                <div class="paper-header">Samples selected</div>
-                <paper-card style="width:100%; height: 100%; overflow-y: auto;">
-                    <div class="selected-samples  card-content">
-                        <template is="dom-repeat" items="{{selected}}">
-                            <div class="sample">{{item.name}}</div>
-                        </template>
-                    </div>
-                </paper-card>
+                <easyngs-basic-panel title="Samples selected">
+                    <template is="dom-repeat" items="{{selected}}">
+                        <div class="sample">{{item.name}}</div>
+                    </template>
+                </easyngs-basic-panel>
             </div>
         </div>
 

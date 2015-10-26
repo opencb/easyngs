@@ -15,7 +15,7 @@
 <dom-module id="easyngs-basic-form" attributes="program">
     <style>
         #browserPanel {
-            position: absolute;
+            position: relative;
             top: 0px;
             left: 0;
             width: 600px;
@@ -35,7 +35,6 @@
                                  value="{{getDefault(item)}}" pattern="{{getPattern(item)}}"
                                  required$="{{item.required}}">
                     </paper-input>
-
                 </div>
             </template>
 
