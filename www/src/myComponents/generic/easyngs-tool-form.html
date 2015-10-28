@@ -12,7 +12,7 @@
 <link rel="import" href="../../lib/jsorolla/src/lib/components/jso-panel.html">
 <link rel="import" href="../../lib/jsorolla/src/lib/components/opencga/files/jso-opencga-browser.html">
 
-<dom-module id="easyngs-basic-form" attributes="program">
+<dom-module id="easyngs-tool-form" attributes="program">
     <style>
         #browserPanel {
             position: relative;
@@ -30,7 +30,7 @@
                     <paper-tooltip fit-to-visible-bounds for="{{getIconID(item)}}">
                         <span>{{item.description}}</span>
                     </paper-tooltip>
-                    <paper-input class="flex" name="{{item.id)}}" label="{{item.name}}"
+                    <paper-input class="flex" name="{{item.name)}}" label="Insert argument"
                                  error-message="The value inserted is not correct." auto-validate
                                  value="{{getDefault(item)}}" pattern="{{getPattern(item)}}"
                                  required$="{{item.required}}">
@@ -71,9 +71,11 @@
     </template>
     <script>
         Polymer({
-            is: "easyngs-basic-form",
+            is: "easyngs-tool-form",
             properties: {
-                program: Array,
+                program: {
+                    type: Object
+                },
                 projects: {
                     type: Array,
                     notify: true
@@ -97,7 +99,7 @@
                 this.$.jsoHeader.getUserInfo(true);
             },
             getParameters: function(item) {
-                return item.parameters;
+                return item.validParams;
             },
             getDefault: function(item) {
                 if (item.hasOwnProperty("default")) {
@@ -106,12 +108,15 @@
                 return "";
             },
             getPattern: function(item) {
+                /*
                 if (item.numeric === true) {
                     return "[0-9]+";
                 } else {
                     // TODO: Add other values. (- fr-unstranded)
                     return "[A-Za-z]+";
                 }
+                */
+                return "";
 
             },
             getIconID: function(item) {

@@ -10,14 +10,24 @@
             <div class="layout horizontal center">
                 <div style="width:200px;">
                     <paper-dropdown-menu label="NGS software">
-                        <paper-menu attr-for-selected="value" class="dropdown-content" selected={{selectedItem}}>
+                        <paper-menu attr-for-selected="value" class="dropdown-content" selected={{selectedTool}}>
                             <template is="dom-repeat" items="{{software}}">
                                 <paper-item value="{{item}}">{{showName(item)}}</paper-item>
                             </template>
                         </paper-menu>
                     </paper-dropdown-menu>
                 </div>
-                <a style="margin-left: 10px; margin-top: 18px; color: #2c43aa; z-index:0;" href={{selectedItem.website}} target="_blank">Show manual</a>
+
+                <paper-dropdown-menu hidden$={{_isHidden(selectedTool)}} label="Method">
+                    <paper-menu attr-for-selected="value" class="dropdown-content" selected={{selectedExecution}}>
+                        <template is="dom-repeat" items="{{selectedTool.executions}}">
+                            <paper-item value="{{item}}">{{item.name}}</paper-item>
+                        </template>
+                    </paper-menu>
+                </paper-dropdown-menu>
+
+                <a hidden$={{!_existWebsite(selectedTool)}} style="margin-left: 10px; margin-top: 18px; color: #2c43aa; z-index:0;" href={{selectedTool.website}} target="_blank">Show manual</a>
+
             </div>
         </template>
     <script>
@@ -28,18 +38,38 @@
                     type: Array,
                     observer: '_softwareChanged'
                 },
-                selectedItem: {
-                    type: String,
+                selectedTool: {
+                    type: Object,
+                    value: {},
+                    observer: '_selectedToolChanged',
+                    notify: true
+                },
+                selectedExecution: {
+                    type: Object,
+                    value: {},
                     notify: true
                 }
+
             },
             showName: function(item) {
                 return item.name + " " + item.version;
             },
             _softwareChanged: function() {
+                debugger
                 if (this.software.length > 0) {
-                    this.selectedItem = this.software[0];
+                    this.set("selectedTool", this.software[0]);
                 }
+            },
+            _selectedToolChanged: function () {
+                if (this.selectedTool.hasOwnProperty("executions")) {
+                    this.set("selectedExecution", this.selectedTool.executions[0]);
+                }
+            },
+            _existWebsite: function (item) {
+                return ((item.hasOwnProperty("website") && item.website.length > 0) ? true : false);
+            },
+            isHidden: function(item) {
+                return (item.hasOwnProperty("executions") && item.executions.length) > 1 ? false : true;
             }
         });
     </script>

@@ -20,11 +20,6 @@ Example:
 <dom-module id="file-folder">
 
     <style>
-        :host.test > .thisFolder > .folderTitle{
-            color: white;
-            background-color: var(--default-primary-color);
-        }
-
         .parent.collapsed:before {
             content: '+ ';
             padding: 5px;
@@ -32,7 +27,7 @@ Example:
 
         .parent.expanded:before {
             content: '- ';
-            padding: 5px;
+            padding: 7px;
         }
 
         .parent, .name {
@@ -62,6 +57,7 @@ Example:
     <template>
         <div class="thisFolder">
             <div class="folderTitle flex">
+                <iron-icon hidden$="{{!data.selected}}" icon="check" style="color: green;"></iron-icon>
                 <span class$="{{_determineClass(data.open, data.children)}}" on-click="toggleChildren">
                     <iron-icon icon$="{{_determineIcon(data)}}"></iron-icon>
                 </span>
@@ -142,13 +138,15 @@ Example:
          */
         selectFolder: function(e) {
             if (this.__data__.data.type === "FILE") {
-                var mydom = Polymer.dom(this).classList;
-                if (mydom.contains("test")) {
+                //var mydom = Polymer.dom(this).classList;
+                if (this.data.selected === true) {
+                    this.set("data.selected", false);
                     this.fire("itemRemoved", this);
                 } else {
+                    this.set("data.selected", true);
                     this.fire("itemSelected", this);
                 }
-                mydom.toggle("test");
+                //mydom.toggle("test");
             }
         },
 

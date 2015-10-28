@@ -186,7 +186,7 @@
                 <!-- TODO: Add button to open menu -->
                 <jso-opencga-header id="jsoHeader" hide-signup hide-jobs hide-browse user-data="{{userData}}"
                                     on-login="handleLogin" on-logout="handleLogout">
-                    <span class="title" style="font-size:25px;">
+                    <span class="title" paper-drawer-toggle style="font-size:25px;">
                         <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
                         easyNGS
                     </span>
@@ -215,7 +215,7 @@
                 <div class="content">
                     <iron-pages attr-for-selected="selectedMenu" selected="{{selectedMenu}}">
                         <div selectedMenu="home">
-                            <easyngs-run-analysis title="Raw Quality Control:" software={{fastqc}} projects={{projects}}></easyngs-run-analysis>
+                            <easyngs-run-analysis title="Raw Quality Control:" software={{test}} projects={{projects}}></easyngs-run-analysis>
                             <!--HOME PANEL-->
                         </div>
                         <!--
@@ -320,29 +320,37 @@
                     type: Array,
                     notify: true
                 },
+                tools: {
+                    type: Object,
+                    notify: true
+                },
+                test: {
+                    type: Array,
+                    notify: true
+                },
                 fastqc: {
                     type: Array,
-                    value: QUALITY_CONTROL.fastqc
+                    notify: true
                 },
                 trimming: {
                     type: Array,
-                    value: QUALITY_CONTROL.trimming
+                    notify: true
                 },
                 wgsMapping: {
                     type: Array,
-                    value: WGS.mapping
+                    notify: true
                 },
                 variant: {
                     type: Array,
-                    value: WGS.variant
+                    notify: true
                 },
                 rnaMapping: {
                     type: Array,
-                    value: RNASEQ.mapping
+                    notify: true
                 },
                 rnaCounting: {
                     type: Array,
-                    value: RNASEQ.counting
+                    notify: true
                 },
                 cellBaseHost: {
                     type: String,
@@ -420,20 +428,69 @@
                                     console.log(response.error);
                                     console.log(response.response[0].errorMsg);
                                 }
-                                me.loading = false;
                             },
                             error: function() {
                                 console.log('Server error, try again later.');
-                                me.loading = false;
                             }
                         }
+                    });
+                    // Obtain the tools
+                    OpencgaManager.tools.search({
+                        query: {
+                            sid: Cookies("bioinfo_sid")
+                        },
+                        request: {
+                            async: true,
+                            success: function(response) {
+                                var results = {};
+                                myTools = response.response[0];
+                                for (var i = 0; i < myTools.numResults; i++) {
+                                    var name = myTools.result[i].manifest.name + myTools.result[i].manifest.version;
+                                    results[name] = myTools.result[i].manifest;
+                                    results[name]["idTool"] = myTools.result[i].id;
+                                }
+                                debugger
+                                me.modifyManifest(results, TEST);
+                                me.test = TEST.test;
+                                /*me.modifyManifest(results, QUALITY_CONTROL);
+                                me.set("fastqc", QUALITY_CONTROL.fastqc);
+                                me.set("trimming", QUALITY_CONTROL.trimming);
+                                me.modifyManifest(results, RNASEQ);
+                                me.set("rnaMapping", RNASEQ.mapping);
+                                me.set("rnaCounting", RNASEQ.counting);
+                                me.modifyManifest(results, WGS);
+                                me.set("wgsMapping", WGS.mapping);
+                                me.set("variant", WGS.variant);*/
+                            },
+                            error: function() {
+                                console.log("Server error, try again later.");
+                            }
+                        }
+
                     });
                 } else {
                     console.log("No user data")
                 }
             },
+            modifyManifest: function(availableTools, requestedTools) {
+                for (var key in requestedTools) {
+                    for (var i = 0; i < requestedTools[key].length; i++) {
+                        var name = requestedTools[key][i].name + requestedTools[key][i].version;
+                        if (availableTools.hasOwnProperty(name)) {
+                            requestedTools[key][i] = availableTools[name];
+                            requestedTools[key][i]["available"] = true;
+                        } else {
+                            requestedTools[key][i]["available"] = false;
+                        }
+                    }
+                }
+            },
             selectedMenuChanged: function(neo, old) {
 
+            },
+            _changedTest: function() {
+                console.log(this.test);
+                debugger
             }
         })
     </script>

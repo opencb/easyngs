@@ -1,12 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../generic/easyngs-form-sample-selection.html">
-<link rel="import" href="../generic/easyngs-basic-form.html">
-<link rel="import" href="../generic/easyngs-form-button-sendjob.html">
-<link rel="import" href="../generic/easyngs-view-title.html">
-<link rel="import" href="../generic/easyngs-form-select-software.html">
-<link rel="import" href="../generic/easyngs-sample-selection.html">
-<link rel="import" href="../generic/easyngs-basic-panel.html">
+<link rel="import" href="easyngs-tool-form.html">
+<link rel="import" href="easyngs-form-button-sendjob.html">
+<link rel="import" href="easyngs-view-title.html">
+<link rel="import" href="easyngs-form-select-software.html">
+<link rel="import" href="easyngs-sample-selection.html">
+<link rel="import" href="easyngs-basic-panel.html">
+
 
 <dom-module id="easyngs-run-analysis">
     <style>
@@ -30,15 +33,19 @@
 
     </style>
     <template>
-        <easyngs-view-title title="{{title}}" subtitle="{{getName(program)}}"></easyngs-view-title>
+        <easyngs-view-title title="{{title}}" subtitle="{{program.name}}"></easyngs-view-title>
         <div class="layout horizontal center wrap">
             <div class="left">
                 <easyngs-sample-selection projects="{{projects}}"></easyngs-sample-selection>
             </div>
             <div class="flex right">
                 <easyngs-basic-panel title="Set the parameters">
-                    <easyngs-form-select-software software="{{software}}" selected-item="{{program}}"></easyngs-form-select-software>
-                    <easyngs-basic-form program="{{program}}" projects="{{projects}}"></easyngs-basic-form>
+                    <easyngs-form-select-software software="{{software}}" selected-tool="{{program}}" selected-execution="{{execution}}"></easyngs-form-select-software>
+                    <easyngs-tool-form program="{{execution}}" projects="{{projects}}"></easyngs-tool-form>
+                    <paper-button raised>
+                        <iron-icon icon="send"></iron-icon>
+                        Store default values
+                    </paper-button>
                 </easyngs-basic-panel>
             </div>
         </div>
@@ -55,13 +62,16 @@
                 projects: {
                     type: Array,
                     notify: true
+                },
+                program: {
+                    type: Object
+                },
+                execution: {
+                    type: Object
                 }
             },
             ready: function () {
                 title = this.title;
-            },
-            getName: function(item) {
-                return item.name;
             },
             getTitle: function() {
                 return this.title;

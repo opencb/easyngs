@@ -13,17 +13,81 @@ OPENCGA_HOST = "http://localhost:8081/opencga";
 CELLBASE_VERSION = "v3";
 CELLBASE_HOST = "http://bioinfodev.hpc.cam.ac.uk/cellbase";
 
-var TEST = [
-    {
-        "name": "Test tool",
-        "id": "test",
-        "version": "v1.0",
-        "description": "Test tool",
-    }
-]
+var TEST = {
+    "test": [
+        {
+            "name": "survival",
+            "version": "1.0"
+        }
+    ]
+}
 
+var QUALITY_CONTROL = {
+    "trimming": [
+        {
+            "name": "cutadapt",
+            "version": "v2.1"
+        },
+        {
+            "name": "trimmomatic",
+            "version": "v2.1"
+        }
+    ],
+    "fastqc": [
+        {
+            "name": "fastqc",
+            "version": "v0.11.4"
+        }
+    ]
+};
 
+var RNASEQ = {
+    "mapping": [
+        {
+            "name": "tophat",
+            "version": "v2.1.0"
+        },
+        {
+            "name": "star",
+            "version": "v2.4.2a"
+        }
+    ],
+    "counting": [
+        {
+            "name": "htseq",
+            "version": "v0.6.1p2"
+        },
+        {
+            "name": "cufflinks",
+            "version": "v2.2.1"
+        }
+    ]
+};
 
+var WGS = {
+    "mapping": [
+        {
+            "name": "bwa",
+            "version": "1.0"
+        },
+        {
+            "name": "other",
+            "version": ""
+        }
+    ],
+    "variant": [
+        {
+            "name": "vcf",
+            "version": "2"
+        },
+        {
+            "name": "noidea",
+            "version": "v2"
+        }
+    ]
+}
+
+/*
 var QUALITY_CONTROL = {
     "trimming": [
         {
@@ -208,3 +272,4 @@ var WGS = {
         }
     ]
 }
+*/
